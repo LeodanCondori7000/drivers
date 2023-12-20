@@ -1,4 +1,5 @@
 const { Driver } = require("../db");
+const { DriversTeams } = require("../db");
 const axios = require("axios");
 
 const getDriversHandler = async (req, res) => {
@@ -31,6 +32,7 @@ const getDriversHandler = async (req, res) => {
         tempObj.dateofbirth = apiDrivers[i]["dob"];
         formattedDrivers[i] = tempObj;
       }
+
 
       // Save the fetched drivers to your local database
       // for (const externalDriver of externalDrivers) {
@@ -73,7 +75,7 @@ const getDriverHandler = async (req, res) => {
 const createDriverHandler = async (req, res) => {
   try {
     // Extract driver information from the request body
-    const { name, lastname, description, image, nationality, dateofbirth } =
+    const { name, lastname, description, image, nationality, dateofbirth, teamId } =
       req.body;
 
     // Create a new driver in the database
@@ -86,8 +88,14 @@ const createDriverHandler = async (req, res) => {
       dateofbirth,
     });
 
-    // Respond with the newly created driver
-    res.status(201).json(newDriver);
+    const newDriverId = newDriver.id;
+  
+    await DriversTeams.create({
+      DriverId: newDriverId,
+      TeamId: teamId,
+    });
+
+    res.status(201).json({ message: "Driver created successfully!"});
   } catch (error) {
     console.error("Error creating driver:", error);
     res.status(500).json({ error: "Internal Server Error" });
