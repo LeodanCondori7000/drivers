@@ -35,6 +35,23 @@ const { Driver, Team } = sequelize.models;
 Driver.belongsToMany(Team, { through: "DriversTeams" });
 Team.belongsToMany(Driver, { through: "DriversTeams" });
 
+// Driver.belongsToMany(Team, {
+//   through: {
+//     model: "DriversTeams",
+//     timestamps: false, // Exclude createdAt and updatedAt columns
+//   },
+//   //foreignKey: "driverId", // Adjust the foreign key column name if needed
+// });
+
+// Team.belongsToMany(Driver, {
+//   through: {
+//     model: "DriversTeams",
+//     timestamps: false, // Exclude createdAt and updatedAt columns
+//   },
+//   //foreignKey: "teamId", // Adjust the foreign key column name if needed
+// });
+
+
 module.exports = {
   ...sequelize.models, // para poder importar los modelos así: const { Product, User } = require('./db.js');
   conn: sequelize,     // para importart la conexión { conn } = require('./db.js');
