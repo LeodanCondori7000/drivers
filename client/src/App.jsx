@@ -1,6 +1,7 @@
 import { BrowserRouter } from "react-router-dom";
 import { Provider } from "react-redux";
-import store from "./driversApp/redux/store.js";
+// import store from "./driversApp/redux/store.js";
+import store from "./driversApp/redux-thunk/store.js";
 import AllComponents from "./driversApp/AllComponents.jsx"
 
 function App() {

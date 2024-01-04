@@ -1,68 +1,46 @@
-const getDriverHandler = async (req, res) => {
-  const id = req.params.idDriver;
+require("dotenv").config();
+const { Sequelize } = require("sequelize");
 
-  try {
-    let driver;
+const fs = require('fs');
+const path = require('path');
+const { DB_USER, DB_PASSWORD, DB_HOST, DB_PORT } = process.env;
 
-    if (!isNaN(id)) {
-      const response = await axios.get(`http://localhost:5000/drivers/${id}`);
-      const tempDriver = response.data;
-      const idDriver = tempDriver.id;
-      const name = tempDriver.name.forename;
-      const lastname = tempDriver.name.surname;
-      const description = tempDriver.description;
-      const image = tempDriver.image.url;
-      const nationality = tempDriver.nationality;
-      const dob = tempDriver.dob;
-      const teams = tempDriver.teams;
-      driver = {
-        id: idDriver,
-        name,
-        lastname,
-        description,
-        image,
-        nationality,
-        dob,
-        teams,
-      };
-    } else {
-      const tempDriver = await Driver.findByPk(id, {
-        include: Team,
-        attributes: { exclude: ["createdAt", "updatedAt"] },
-        nest: true,
-      });
+console.log("DB_USER:", DB_USER);
+console.log("DB_PASSWORD:", DB_PASSWORD);
+console.log("DB_HOST:", DB_HOST);
+console.log("DB_PORT:", DB_PORT);
 
-      driver = {
-        id: tempDriver.id,
-        name: tempDriver.name,
-        lastname: tempDriver.lastname,
-        description: tempDriver.description,
-        image: tempDriver.image,
-        nationality: tempDriver.nationality,
-        dateofbirth: tempDriver.dateofbirth,
-        teams: Teams.map((team) => team.name).join(", "),
-      };
+const sequelize = new Sequelize(`postgres://${DB_USER}:${DB_PASSWORD}@${DB_HOST}:${DB_PORT}/drivers`, {
+  dialect: 'postgres',
+  logging: false,
+  native: false,
+});
 
-      if (!driver) {
-        res.status(404).json({ error: "Driver not found" });
-        return;
-      }
-    }
-    if (driver.Teams) {
-      driver.Teams = driver.Teams.map((team) => ({
-        id: team.id,
-        name: team.name,
-      }));
-    }
+const basename = path.basename(__filename);
 
-    res.status(200).json(driver);
-  } catch (error) {
-    console.error("Error fetching driver:", error);
+const modelDefiners = [];
 
-    if (error.response && error.response.status === 404) {
-      res.status(404).json({ error: "Driver not found" });
-    } else {
-      res.status(500).json({ error: "Internal Server Error" });
-    }
-  }
+fs.readdirSync(path.join(__dirname, '/models'))
+  .filter((file) => (file.indexOf('.') !== 0) && (file !== basename) && (file.slice(-3) === '.js'))
+  .forEach((file) => {
+    modelDefiners.push(require(path.join(__dirname, '/models', file)));
+  });
+
+
+modelDefiners.forEach(model => model(sequelize));
+
+let entries = Object.entries(sequelize.models);
+let capsEntries = entries.map((entry) => [entry[0][0].toUpperCase() + entry[0].slice(1), entry[1]]);
+sequelize.models = Object.fromEntries(capsEntries);
+
+const { Driver, Team } = sequelize.models;
+
+// Aca vendrian las relaciones
+// Product.hasMany(Reviews);
+Driver.belongsToMany(Team, { through: "DriversTeams" });
+Team.belongsToMany(Driver, { through: "DriversTeams" });
+
+module.exports = {
+  ...sequelize.models, // para poder importar los modelos así: const { Product, User } = require('./db.js');
+  conn: sequelize,     // para importart la conexión { conn } = require('./db.js');
 };
