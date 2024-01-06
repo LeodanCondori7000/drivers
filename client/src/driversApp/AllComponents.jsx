@@ -1,12 +1,15 @@
 import React from 'react';
-// import Counter from './components/Counter';
-import UserList from './components/UserList';
+import { Routes, Route } from "react-router-dom";
+import Landing from './components/landing/Landing';
+import Home from './components/home/Home';
 
 function AllComponents() {
   return (
     <div>
-      {/* <Counter /> */}
-      <UserList />
+      <Routes>
+        <Route path="/" element={<Landing />}/>
+        <Route path="/home" element={<Home />}/>
+      </Routes>
     </div>
   )
 }
