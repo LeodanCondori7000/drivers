@@ -1,8 +1,11 @@
-import React from 'react'
+import React from 'react';
+import styles from './landing.module.css';
 
 function Landing() {
   return (
-    <div>Landing</div>
+    <div className={styles.container}>
+      <button className={styles.btn}>go inside</button>
+    </div>
   )
 }
 
