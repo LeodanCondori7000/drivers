@@ -1,4 +1,4 @@
-git checkout -b aux-branch
+git checkout -b aux-branch or git checkout -b collab-branch
 git add .
 git commit -m "some relevant message"
 git push -u origin aux-branch
