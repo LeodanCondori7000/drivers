@@ -195,7 +195,7 @@ const createDriverHandler = async (req, res) => {
       image,
       nationality,
       dateofbirth,
-      teams,
+      teamNames,
     } = req.body;
 
     const newDriver = await Driver.create({
@@ -206,7 +206,14 @@ const createDriverHandler = async (req, res) => {
       nationality,
       dateofbirth,
     });
-    const teamsArr = teams.split(",");
+    // let teamNamesFormat = teamNames.trim();
+
+    // console.log(string.includes(substring));
+    // let teamsArr;
+    // if(teamNamesFormat.includes(",")){
+
+    // }
+    const teamsArr = teamNames.split(",");
     // my version
     // const driverId = newDriver.id;
     // const idTeams = await Promise.all(

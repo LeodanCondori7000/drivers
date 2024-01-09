@@ -6,6 +6,7 @@ import Home from './components/home/Home';
 import Nav from './components/nav/Nav';
 const USER_EMAIL = "leo@gmail.com";
 const USER_PASSWORD = "123qwe";
+import CreateDriverForm from "./components/createDriver/CreateDriverForm";
 
 function AllComponents() {
   const { pathname } = useLocation();
@@ -31,6 +32,9 @@ function AllComponents() {
         {/* <Route path="/" element={<Landing />}/> */}
         <Route path="/" element={<Login login={login} />} />
         <Route path="/home" element={<Home />} />
+        <Route path="/" element={<Landing />}/>
+        <Route path="/home" element={<Home />}/>
+        <Route path="/driver" element={<CreateDriverForm />} />
       </Routes>
     </div>
   )
