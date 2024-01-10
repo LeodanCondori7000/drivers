@@ -1,9 +1,14 @@
-import React from 'react'
-
-const Nav = () => {
+import Button from "../button/Button";
+import Search from "../search/Search";
+const Nav = ({ onSearch }) => {
   return (
-    <div>Nav</div>
-  )
-}
+    <nav>
+      <Button link="/driver" text="Create Driver" />
+      <Search onSearch={onSearch} />
+      <Button link="/home" text="Home" />
+      <Button link="/about" text="About" />
+    </nav>
+  );
+};
 
-export default Nav
+export default Nav;

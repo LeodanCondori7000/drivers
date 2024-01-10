@@ -1,7 +1,8 @@
-import { FETCH_DRIVERS } from "../actions/actionTypes";
+import { FETCH_DRIVERS, SEARCH_DRIVERS } from "../actions/actionTypes";
 
 const initialState = {
   drivers: [],
+  searchedDriver: []
 };
 
 // Reducer function
@@ -12,6 +13,11 @@ const reducer = (state = initialState, action) => {
         ...state,
         drivers: action.payload
       };
+    case SEARCH_DRIVERS:
+      return {
+        ...state,
+        searchedDriver: action.payload
+      }
     default:
       return state;
   }

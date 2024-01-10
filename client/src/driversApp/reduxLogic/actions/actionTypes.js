@@ -1,1 +1,2 @@
 export const FETCH_DRIVERS = 'FETCH_DRIVERS';
+export const SEARCH_DRIVERS = 'SEARCH_DRIVERS';
