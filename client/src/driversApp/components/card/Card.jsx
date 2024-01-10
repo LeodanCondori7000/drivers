@@ -1,6 +1,7 @@
 import React from 'react';
 
 const Card = ({driver}) => {
+  console.log(driver);
   return (
     <div>
       <h2>name: {driver.name + " " + driver.lastname}</h2>

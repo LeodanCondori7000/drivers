@@ -1,4 +1,4 @@
-import { FETCH_DRIVERS } from './actionTypes';
+import { FETCH_DRIVERS, SEARCH_DRIVERS } from "./actionTypes";
 import axios from 'axios';
 
 export const fetchDrivers = () => {
@@ -16,3 +16,17 @@ export const fetchDrivers = () => {
       });
   };
 };
+
+export const searchDrivers = (driver) =>{
+  return (dispatch) => {
+    axios.get(`http://localhost:3001/drivers?name=${driver}`)
+      .then(response => {
+        const drivers = response.data;
+        dispatch({
+          type: SEARCH_DRIVERS,
+          payload: drivers,
+        });
+      })
+      
+  }
+}
